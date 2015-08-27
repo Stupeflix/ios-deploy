@@ -1549,9 +1549,14 @@ void handle_device(AMDeviceRef device) {
     CFStringRef found_device_id = AMDeviceCopyDeviceIdentifier(device),
                 device_full_name = get_device_full_name(device),
                 device_interface_name = get_device_interface_name(device);
-                
+
     if (detect_only) {
-        NSLogOut(@"[....] Found %@ connected through %@.", device_full_name, device_interface_name);
+        if (verbose) {
+            NSLogOut(@"[....] Found %@ connected through %@.", device_full_name, device_interface_name);
+        } else {
+            NSLogOut(@"%@", device_full_name);
+        }
+
         found_device = true;
         return;
     }
@@ -1937,11 +1942,15 @@ int main(int argc, char *argv[]) {
     {
         CFRunLoopTimerRef timer = CFRunLoopTimerCreate(NULL, CFAbsoluteTimeGetCurrent() + timeout, 0, 0, 0, timeout_callback, NULL);
         CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, kCFRunLoopCommonModes);
-        NSLogOut(@"[....] Waiting up to %d seconds for iOS device to be connected", timeout);
+        if (verbose) {
+            NSLogOut(@"[....] Waiting up to %d seconds for iOS device to be connected", timeout);
+        }
     }
     else
     {
-        NSLogOut(@"[....] Waiting for iOS device to be connected");
+        if (verbose) {
+            NSLogOut(@"[....] Waiting for iOS device to be connected");
+        }
     }
 
     struct am_device_notification *notify;
