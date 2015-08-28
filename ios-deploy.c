@@ -1574,7 +1574,9 @@ void handle_device(AMDeviceRef device) {
         found_device = true;
     }
 
-    NSLogOut(@"[....] Using %@.", device_full_name);
+    if (verbose) {
+        NSLogOut(@"[....] Using %@.", device_full_name);
+    }
 
     if (command_only) {
         if (strcmp("list", command) == 0) {
